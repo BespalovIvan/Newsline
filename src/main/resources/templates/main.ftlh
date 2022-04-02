@@ -15,8 +15,8 @@
     <i>${news.header}</i>
     <span>${news.text}</span>
     <div>
-        <#if news.file??>
-            <img src="/img/${news.file}">
+        <#if news.filename??>
+            <img src="/img/${news.filename}">
         </#if>
     </div>
     <i>${news.createDateTime}</i>
