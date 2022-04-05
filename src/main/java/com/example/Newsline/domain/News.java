@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class News {
@@ -61,8 +62,8 @@ public class News {
         this.filename = filename;
     }
 
-    public LocalDateTime getCreateDateTime() {
-        return createDateTime;
+    public String getCreateDateTime() {
+        return createDateTime.format(DateTimeFormatter.ofPattern("dd-MM-yy HH:mm"));
     }
 
     public void setCreateDateTime(LocalDateTime createDateTime) {

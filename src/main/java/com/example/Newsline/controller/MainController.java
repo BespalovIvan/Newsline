@@ -29,22 +29,20 @@ public class MainController {
 
     /*
      Method for displaying the main page,
-     @return file name ftlh to display on the UI.
+     @return file name ftlh for shows to UI.
     */
-
     @GetMapping("/")
     public String greeting() {
         return "greeting";
     }
 
     /*
-     Method to send all news to UI.
+     Method sends all news to UI.
      @param model - to transfer objects to UI.
      @param pageable - paginator, for page output of objects.
         By default, reverse sorting is applied.
-     @return file name ftlh to display on the UI.
+     @return file name ftlh for shows to UI.
     */
-
     @GetMapping("/main")
     public String findAll(Model model,
                           @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
@@ -55,17 +53,15 @@ public class MainController {
     }
 
     /*
-
-     Method to add news.
+     Method to adds news.
      @param model - to transfer objects to UI.
      @param newsDto - dto object News.
      @param file - image News.
      @param pageable - paginator, for page output of objects.
          By default, reverse sorting is applied.
         Transferred back to UI from news.
-     @return file name ftlh to display on the UI.
+     @return file name ftlh for shows to UI.
     */
-
     @PostMapping("/main")
     public String addNews(Model model, NewsDto newsDto,
                       @RequestParam MultipartFile file,
@@ -75,19 +71,14 @@ public class MainController {
             newsService.saveNews(newsDto, file);
         }
         catch (IllegalArgumentException e) {
-            e.printStackTrace();
             model.addAttribute("error", e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
             model.addAttribute("error", "Error saving image! ");
         } catch (Exception e) {
-            e.printStackTrace();
             model.addAttribute("error", "Error saving news!");
         }
-
         model.addAttribute("page", newsService.findAll(pageable));
         model.addAttribute("url", "/main");
         return "main";
     }
-
 }

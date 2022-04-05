@@ -7,7 +7,7 @@
     </a>
     <div class="collapse mt-2" id="collapseExample">
         <div class="form-group mt-3">
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" >
                 <div class="form-group">
                     <input type="text" class="form-control" name="header" placeholder="Enter title">
                 </div>
@@ -44,7 +44,9 @@
             <img src="/img/${news.filename}" class="card-img-top">
         </#if>
     </div>
+    <div class="card-footer">
     <i>${news.createDateTime}</i>
+    </div>
 </div>
 <#else>
 No news
