@@ -13,6 +13,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+/*
+@author Bespalov Ivan
+*/
+
 @Service
 public class NewsServiceImpl implements NewsService {
 
@@ -25,30 +29,47 @@ public class NewsServiceImpl implements NewsService {
         this.newsRepo = newsRepo;
     }
 
+     /*
+     Method to save news.
+     @param newsDto - dto object news.
+     @param file - image news.
+    */
+
     @Override
-    public void saveNews(NewsDto newsDto, MultipartFile file) {
+    public void saveNews(NewsDto newsDto, MultipartFile file) throws IllegalArgumentException, IOException {
+        if (newsDto.getHeader().isEmpty() || newsDto.getText().isEmpty()) {
+            throw new IllegalArgumentException("Field Header or text not must be empty!");
+        }
+
         News news = new News(newsDto);
-
         if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadPath);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-            String uidFile = UUID.randomUUID().toString();
-            String resultFilename = uidFile + "." + file.getOriginalFilename();
-
-            try {
-                file.transferTo(new File(uploadPath + "/" + resultFilename));
-            } catch (IOException e) {
-                e.printStackTrace();
-                // добавить обработку исключения
-            }
-
-            news.setFilename(resultFilename);
+            news.setFilename(saveFile(file));
         }
         newsRepo.save(news);
     }
+
+    /*
+     Method to save image.
+     @param file - image news.
+    */
+    private String saveFile(MultipartFile file) throws IOException {
+        File uploadDir = new File(uploadPath);
+
+        if (!uploadDir.exists()) {
+            uploadDir.mkdir();
+        }
+        String uidFile = UUID.randomUUID().toString();
+        String resultFilename = uidFile + "." + file.getOriginalFilename();
+
+        file.transferTo(new File(uploadPath + "/" + resultFilename));
+        return resultFilename;
+    }
+
+    /*
+     Method for finding the required quantity news.
+     @param pageable - paginator, for page output of objects.
+     @return Page<News> - prepared list of News.
+    */
 
     @Override
     public Page<News> findAll(Pageable pageable) {
