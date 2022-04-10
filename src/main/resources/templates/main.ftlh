@@ -40,8 +40,8 @@
             <p class="card-text">${news.text}</p>
         </div>
         <div>
-            <#if news.filename??>
-            <img src="/img/${news.filename}" class="card-img-top">
+            <#if news.image??>
+            <img src="/img/news/${news.id}" class="card-img-top" alt="Card image cap" style="width:100%">
         </#if>
     </div>
     <div class="card-footer">

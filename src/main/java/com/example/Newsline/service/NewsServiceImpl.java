@@ -6,12 +6,14 @@ import com.example.Newsline.repos.NewsRepo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.io.File;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.UUID;
+import java.util.Optional;
 
 /*
 @author Bespalov Ivan
@@ -43,26 +45,29 @@ public class NewsServiceImpl implements NewsService {
 
         News news = new News(newsDto);
         if (file != null && !file.getOriginalFilename().isEmpty()) {
-            news.setFilename(saveFile(file));
+            news.setImage(file.getBytes());
         }
         newsRepo.save(news);
     }
 
-    /*
-     Method to save image.
-     @param file - image news.
-    */
-    private String saveFile(MultipartFile file) throws IOException {
-        File uploadDir = new File(uploadPath);
+    @Override
+    public byte[] getImage (Long id, HttpServletResponse response) throws IOException{
 
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
+        Optional<News> newsSearchResult = newsRepo.findById(id);
+
+        if(newsSearchResult.isPresent()){
+            News news = newsSearchResult.get();
+            if(news.getImage() != null && news.getImage().length > 0){
+                byte[] img = news.getImage();
+
+                response.setContentType("image/jpeg");
+                response.setContentLength(img.length);
+                response.getOutputStream().write(img);
+
+                return news.getImage();
+            }
         }
-        String uidFile = UUID.randomUUID().toString();
-        String resultFilename = uidFile + "." + file.getOriginalFilename();
-
-        file.transferTo(new File(uploadPath + "/" + resultFilename));
-        return resultFilename;
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Image Not Found");
     }
 
     /*

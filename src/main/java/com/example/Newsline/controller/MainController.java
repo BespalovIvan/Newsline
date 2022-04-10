@@ -5,13 +5,13 @@ import com.example.Newsline.service.NewsService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /*
@@ -43,6 +43,7 @@ public class MainController {
         By default, reverse sorting is applied.
      @return file name ftlh for shows to UI.
     */
+
     @GetMapping("/main")
     public String findAll(Model model,
                           @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
@@ -50,6 +51,16 @@ public class MainController {
         model.addAttribute("url", "/main");
         model.addAttribute("page", newsService.findAll(pageable));
         return "main";
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/img/news/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getImage(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
+
+         return newsService.getImage(id,response);
+
+
+
     }
 
     /*
@@ -74,6 +85,7 @@ public class MainController {
             model.addAttribute("error", e.getMessage());
         } catch (IOException e) {
             model.addAttribute("error", "Error saving image! ");
+            e.printStackTrace();
         } catch (Exception e) {
             model.addAttribute("error", "Error saving news!");
         }
@@ -81,4 +93,6 @@ public class MainController {
         model.addAttribute("url", "/main");
         return "main";
     }
+
+
 }

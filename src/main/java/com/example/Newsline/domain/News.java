@@ -2,10 +2,7 @@ package com.example.Newsline.domain;
 
 import com.example.Newsline.dto.NewsDto;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -18,8 +15,11 @@ public class News {
 
     private String text;
     private String header;
-    private String filename;
     private LocalDateTime createDateTime;
+
+
+    private byte[] image;
+
 
     public News() {
     }
@@ -54,13 +54,15 @@ public class News {
         this.header = header;
     }
 
-    public String getFilename() {
-        return filename;
+
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
+
 
     public String getCreateDateTime() {
         return createDateTime.format(DateTimeFormatter.ofPattern("dd-MM-yy HH:mm"));
