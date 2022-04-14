@@ -24,9 +24,6 @@ public class NewsServiceImpl implements NewsService {
 
     private final NewsRepo newsRepo;
 
-    @Value("${upload.path}")
-    private String uploadPath;
-
     public NewsServiceImpl(NewsRepo newsRepo) {
         this.newsRepo = newsRepo;
     }

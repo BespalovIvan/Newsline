@@ -5,9 +5,16 @@
     <a class="btn btn-primary mt-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
         Add news
     </a>
+    <div>
+        <form action="/logout" method="post">
+            <input type="submit" value="Sign Out"/>
+            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+        </form>
+    </div>
     <div class="collapse mt-2" id="collapseExample">
         <div class="form-group mt-3">
             <form method="post" enctype="multipart/form-data" >
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
                 <div class="form-group">
                     <input type="text" class="form-control" name="header" placeholder="Enter title">
                 </div>
