@@ -1,11 +1,13 @@
 package com.example.Newsline.controller;
 
+import com.example.Newsline.domain.User;
 import com.example.Newsline.dto.NewsDto;
 import com.example.Newsline.service.NewsService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -74,12 +76,14 @@ public class MainController {
      @return file name ftlh for shows to UI.
     */
     @PostMapping("/main")
-    public String addNews(Model model, NewsDto newsDto,
+    public String addNews(
+                      @AuthenticationPrincipal User user,
                       @RequestParam MultipartFile file,
-                      @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
+                      @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                      Model model, NewsDto newsDto
     ) {
         try {
-            newsService.saveNews(newsDto, file);
+            newsService.saveNews(newsDto, file, user);
         }
         catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());

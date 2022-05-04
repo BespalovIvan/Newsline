@@ -1,6 +1,7 @@
 package com.example.Newsline.service;
 
 import com.example.Newsline.domain.News;
+import com.example.Newsline.domain.User;
 import com.example.Newsline.dto.NewsDto;
 import com.example.Newsline.repos.NewsRepo;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,12 +36,11 @@ public class NewsServiceImpl implements NewsService {
     */
 
     @Override
-    public void saveNews(NewsDto newsDto, MultipartFile file) throws IllegalArgumentException, IOException {
+    public void saveNews(NewsDto newsDto, MultipartFile file, User user) throws IllegalArgumentException, IOException {
         if (newsDto.getHeader().isEmpty() || newsDto.getText().isEmpty()) {
             throw new IllegalArgumentException("Field Header or text not must be empty!");
         }
-
-        News news = new News(newsDto);
+        News news = new News(newsDto, user);
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             news.setImage(file.getBytes());
         }

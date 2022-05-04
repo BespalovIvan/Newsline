@@ -1,16 +1,14 @@
 <#import "parts/common.ftlh" as c>
 <#import "parts/pager.ftlh" as p>
+
 <@c.page>
+<div>
+    <span><a href="/user">User List</a></span>
+</div>
 <div>
     <a class="btn btn-primary mt-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
         Add news
     </a>
-    <div>
-        <form action="/logout" method="post">
-            <input type="submit" value="Sign Out"/>
-            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-        </form>
-    </div>
     <div class="collapse mt-2" id="collapseExample">
         <div class="form-group mt-3">
             <form method="post" enctype="multipart/form-data" >
@@ -52,6 +50,7 @@
         </#if>
     </div>
     <div class="card-footer">
+        <strong>${news.authorName}</strong>
     <i>${news.createDateTime}</i>
     </div>
 </div>

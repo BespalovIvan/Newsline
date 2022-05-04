@@ -15,6 +15,11 @@ public class News {
 
     private String text;
     private String header;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User author;
+
     private LocalDateTime createDateTime;
 
 
@@ -24,10 +29,20 @@ public class News {
     public News() {
     }
 
-    public News(NewsDto newsDto) {
+    public News(NewsDto newsDto , User user) {
         this.text = newsDto.getText();
         this.header = newsDto.getHeader();
         this.createDateTime = LocalDateTime.now();
+        this.author = user;
+    }
+
+    public String getAuthorName(){
+        if(author != null){
+            return author.getUsername();
+        }
+        else {
+            return "<none>";
+        }
     }
 
     public Long getId() {
@@ -70,6 +85,14 @@ public class News {
 
     public void setCreateDateTime(LocalDateTime createDateTime) {
         this.createDateTime = createDateTime;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 }
 
